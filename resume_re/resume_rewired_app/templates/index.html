@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart ATS</title>
+    <style>
+        body {
+    background-size: cover;
+    background-color: #28889b;
+    background-blend-mode: multiply;
+    font-family: sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+.container {
+    width: 600px;
+    margin-top: 50px;
+    background: radial-gradient(circle at center, #4ce1ffa0, #00ACD0);
+    padding: 20px;
+    border-radius: 8px;
+    color: rgb(31, 30, 79);
+    position: relative;
+    z-index: 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25), 0 6px 6px rgba(0, 0, 0, 0.22);
+    transition: transform 0.3s ease;
+}
+.container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 20px 20px rgba(0, 0, 0, 0.22);
+}
+.file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 200px;
+    border: 2px dashed #336699;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.file-upload-icon {
+    font-size: 48px;
+    color: #336699;
+}
+.file-upload-text {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555555;
+}
+.form-control-file {
+    display: none;
+}
+.progress-circle {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(#00ACD0 0deg, #00ACD0 var(--percentage), #ddd var(--percentage));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+.progress-circle::before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: #28889b;
+    border-radius: 50%;
+}
+.progress-circle span {
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+}
+#jobdescriptiontextbox{
+    height: 25vh;
+    width: 100%;
+    background-color: #28889b00;
+    border: 2px solid #336699;
+    border-radius: 8px;
+    align-items: center;
+
+}
+textarea::placeholder {
+  font-weight: bold;
+  opacity: 0.5;
+  color: rgb(9, 47, 82);
+  text-align: center;
+  top: 50%;
+}
+.btn {
+    background-color: #336699; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Padding around the text */
+    font-size: 16px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Smart ATS</h1>
+        <p>Improve Your Resume ATS</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea name="job_description" placeholder="Paste the Job Description" id="jobdescriptiontextbox"></textarea><br>
+            <label class="file-upload">
+                <i class="bi bi-file-earmark-pdf file-upload-icon"></i>
+                <div class="file-upload-text">Click here or drag and drop a PDF file</div>
+                <input type="file" name="resume" accept="application/pdf" class="form-control-file" onchange="updateFileName(this)">
+            </label><br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-primary">Reset</button>
+        </form>
+
+        {% if response %}
+            <hr>
+            <h4 class="text-center">Your Score</h4>
+            <div id="scoreDisplay" class="progress-circle" style="--percentage: {{ percentage }}deg">
+                <span>{{ percentage }}</span>
+            </div>
+            <h2>Response</h2>
+            <md-block>{{ response }}</md-block> 
+            <h2>Matching Percentage</h2>
+            <p>{{ percentage }}%</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function updateFileName(input) {
+            const fileName = input.files[0].name;
+            document.querySelector('.file-upload-text').innerText = fileName;
+        }
+    </script>
+    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
+</body>
+</html>
