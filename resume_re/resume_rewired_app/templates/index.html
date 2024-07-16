@@ -125,14 +125,12 @@ textarea::placeholder {
 
         {% if response %}
             <hr>
-            <h4 class="text-center">Your Score</h4>
+            <h4 class="text-center">Match between job description and resume:</h4>
             <div id="scoreDisplay" class="progress-circle" style="--percentage: {{ percentage }}deg">
                 <span>{{ percentage }}</span>
             </div>
-            <h2>Response</h2>
+            <h2>Improvements</h2>
             <md-block>{{ response }}</md-block> 
-            <h2>Matching Percentage</h2>
-            <p>{{ percentage }}%</p>
         {% endif %}
     </div>
 
@@ -141,6 +139,12 @@ textarea::placeholder {
             const fileName = input.files[0].name;
             document.querySelector('.file-upload-text').innerText = fileName;
         }
+        document.addEventListener("DOMContentLoaded", function() {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const p = "{{ percentage }}";
+            scoreDisplay.style.setProperty('--percentage', `${p * 3.6}deg`);
+            scoreDisplay.querySelector('span').innerText = `${percentage}%`;
+        })
     </script>
     <script type="module" src="https://md-block.verou.me/md-block.js"></script>
 </body>
